@@ -14,6 +14,7 @@ interface IFileUploadButton {
 }
 
 const AutoFileUploader = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   name,
   label,
   accept,

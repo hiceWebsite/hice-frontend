@@ -19,6 +19,7 @@ type TProps = {
 
 export default function PHAlert({
   open,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setOpen,
   title,
   handleConfirm,

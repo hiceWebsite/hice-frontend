@@ -11,6 +11,7 @@ type TInputProps = {
   placeholder?: string;
   required?: boolean;
   inputProps?: TextFieldProps["inputProps"];
+  icon?: React.ReactNode; // Uncomment if you want to use an icon
 };
 
 const PHInput = ({
@@ -22,6 +23,7 @@ const PHInput = ({
   sx,
   required,
   inputProps,
+  icon,
 }: TInputProps) => {
   const { control } = useFormContext();
   return (
@@ -43,6 +45,11 @@ const PHInput = ({
           error={!!error?.message}
           helperText={error?.message}
           inputProps={inputProps}
+          InputProps={{
+            startAdornment: icon ? (
+              <span style={{ marginRight: 8 }}>{icon}</span>
+            ) : undefined,
+          }}
         />
       )}
     />

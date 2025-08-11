@@ -50,6 +50,7 @@ const ProductsTable = () => {
     setOpenCreateDialog(true);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleCreateClose = () => {
     setOpenCreateDialog(false);
   };

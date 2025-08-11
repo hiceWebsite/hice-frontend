@@ -2,10 +2,11 @@
 "use client";
 
 import React from "react";
-import { Grid, Button } from "@mui/material";
+// import { Grid, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { FieldValues } from "react-hook-form";
 import PHForm from "@/components/Forms/PHForm";
-import PHInput from "@/components/Forms/PHInput";
+// import PHInput from "@/components/Forms/PHInput";
 import PHFullScreenModal from "@/components/Shared/PHModal/PHFullScreenModal";
 import { useCreateProductMutation } from "@/redux/api/productApi";
 import { modifyPayload } from "@/utils/modifyPayload";
@@ -62,7 +63,7 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
       sx={{ zIndex: 1300 }} // Ensure modal is above other components
     >
       <PHForm onSubmit={handleFormSubmit} defaultValues={defaultValues}>
-        <Grid container spacing={2} sx={{ my: 5 }}>
+        {/* <Grid container spacing={2} sx={{ my: 5 }}>
           <Grid item xs={12} sm={12} md={4}>
             <PHInput
               name="codeNumber"
@@ -112,7 +113,7 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
               required
             />
           </Grid>
-        </Grid>
+        </Grid> */}
         <Button type="submit">Create</Button>
       </PHForm>
     </PHFullScreenModal>

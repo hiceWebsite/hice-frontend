@@ -1,5 +1,3 @@
-import MuiEditableTable from "@/components/Ui/Admin/ManageUsers/UsersTable";
-
 const ManageUsers = () => {
   return (
     <div>

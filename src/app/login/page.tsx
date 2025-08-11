@@ -11,17 +11,17 @@ import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/services/auth.services";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { z } from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import logoWhite from "@/assets/white-logo.png";
 import Person2Icon from "@mui/icons-material/Person2";
 import LockIcon from "@mui/icons-material/Lock";
 
-export const validationSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(5, "Password must be at least 5 characters"),
-});
+// export const validationSchema = z.object({
+//   email: z.string().email("Please enter a valid email address"),
+//   password: z.string().min(5, "Password must be at least 5 characters"),
+// });
 
 const LoginPage = () => {
   const router = useRouter();
@@ -108,7 +108,7 @@ const LoginPage = () => {
         <Box>
           <PHForm
             onSubmit={handleLogin}
-            resolver={zodResolver(validationSchema)}
+            // resolver={zodResolver(validationSchema)}
             defaultValues={{ email: "", password: "" }}
           >
             <Box>
