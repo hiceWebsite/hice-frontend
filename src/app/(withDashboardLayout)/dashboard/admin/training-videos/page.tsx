@@ -1,7 +1,9 @@
+import TrainingVideosTable from "@/components/Ui/Admin/ManageTrainingVideo/TrainingVideoTable";
+
 const ManageTrainingVideos = () => {
   return (
     <div>
-      <h1>This is training video page</h1>
+      <TrainingVideosTable />
     </div>
   );
 };

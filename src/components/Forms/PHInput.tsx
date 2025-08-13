@@ -1,4 +1,4 @@
-import { SxProps, TextField, TextFieldProps } from "@mui/material";
+import { SxProps, TextField } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 
 type TInputProps = {
@@ -10,8 +10,8 @@ type TInputProps = {
   sx?: SxProps;
   placeholder?: string;
   required?: boolean;
-  inputProps?: TextFieldProps["inputProps"];
-  icon?: React.ReactNode; // Uncomment if you want to use an icon
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  icon?: React.ReactNode;
 };
 
 const PHInput = ({
@@ -26,6 +26,7 @@ const PHInput = ({
   icon,
 }: TInputProps) => {
   const { control } = useFormContext();
+
   return (
     <Controller
       control={control}
@@ -44,11 +45,13 @@ const PHInput = ({
           required={required}
           error={!!error?.message}
           helperText={error?.message}
-          inputProps={inputProps}
-          InputProps={{
-            startAdornment: icon ? (
-              <span style={{ marginRight: 8 }}>{icon}</span>
-            ) : undefined,
+          slotProps={{
+            input: {
+              ...inputProps,
+              startAdornment: icon ? (
+                <span style={{ marginRight: 8 }}>{icon}</span>
+              ) : undefined,
+            },
           }}
         />
       )}

@@ -6,6 +6,16 @@ import { TDisclaimer } from "@/types/disclaimer";
 
 export const disclaimerApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    //Create Disclaimers
+    createDisclaimer: build.mutation({
+      query: (data) => ({
+        url: "/disclaimers/create-disclaimer",
+        method: "POST",
+        data: data.body,
+      }),
+      invalidatesTags: [tagTypes.disclaimer],
+    }),
+
     //get all Disclaimers
     getAllDisclaimers: build.query({
       query: (arg: Record<string, any>) => ({
@@ -30,8 +40,34 @@ export const disclaimerApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.disclaimer],
     }),
+
+    //update Disclaimer
+    updateDisclaimer: build.mutation({
+      query: (data) => {
+        return {
+          url: `/disclaimers/${data.id}`,
+          method: "PATCH",
+          data: data.body,
+        };
+      },
+      invalidatesTags: [tagTypes.disclaimer],
+    }),
+
+    //delete Disclaimer
+    deleteDisclaimer: build.mutation({
+      query: (id) => ({
+        url: `/disclaimers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.disclaimer],
+    }),
   }),
 });
 
-export const { useGetAllDisclaimersQuery, useGetDisclaimerQuery } =
-  disclaimerApi;
+export const {
+  useGetAllDisclaimersQuery,
+  useGetDisclaimerQuery,
+  useCreateDisclaimerMutation,
+  useUpdateDisclaimerMutation,
+  useDeleteDisclaimerMutation,
+} = disclaimerApi;

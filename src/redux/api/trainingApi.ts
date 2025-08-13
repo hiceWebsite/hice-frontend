@@ -6,6 +6,16 @@ import { TTrainingVideo } from "@/types/trainingVideo";
 
 export const disclaimerApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    //Create TrainingVideos
+    createTrainingVideo: build.mutation({
+      query: (data) => ({
+        url: "/training-videos/create-training-video",
+        method: "POST",
+        data: data.body,
+      }),
+      invalidatesTags: [tagTypes.trainingVideo],
+    }),
+
     //get all Training Videos
     getAllTrainingVideos: build.query({
       query: (arg: Record<string, any>) => ({
@@ -30,8 +40,34 @@ export const disclaimerApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.trainingVideo],
     }),
+
+    //update TrainingVideo
+    updateTrainingVideo: build.mutation({
+      query: (data) => {
+        return {
+          url: `/training-videos/${data.id}`,
+          method: "PATCH",
+          data: data.body,
+        };
+      },
+      invalidatesTags: [tagTypes.trainingVideo],
+    }),
+
+    //delete TrainingVideo
+    deleteTrainingVideo: build.mutation({
+      query: (id) => ({
+        url: `/training-videos/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.trainingVideo],
+    }),
   }),
 });
 
-export const { useGetAllTrainingVideosQuery, useGetTrainingVideoQuery } =
-  disclaimerApi;
+export const {
+  useGetAllTrainingVideosQuery,
+  useGetTrainingVideoQuery,
+  useCreateTrainingVideoMutation,
+  useUpdateTrainingVideoMutation,
+  useDeleteTrainingVideoMutation,
+} = disclaimerApi;

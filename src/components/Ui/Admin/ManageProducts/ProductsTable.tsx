@@ -1,28 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Button,
   IconButton,
   Dialog,
   DialogActions,
+  DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   TextField,
+  Paper,
+  Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,
 } from "@/redux/api/productApi";
+import { modifyPayload } from "@/utils/modifyPayload";
+import { toast } from "sonner";
 import CreateProduct from "./CreateProduct";
+import PHForm from "@/components/Forms/PHForm";
+import {
+  FieldValues,
+  useController,
+  useFormContext,
+  SubmitHandler,
+} from "react-hook-form";
+import { useDropzone } from "react-dropzone";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export type TProduct = {
+type TProduct = {
   _id: string;
   codeNumber: string;
   title: string;
@@ -34,6 +51,105 @@ export type TProduct = {
   updatedAt: string;
 };
 
+// Form values type
+interface FormValues {
+  codeNumber: string;
+  title: string;
+  category: string;
+  twoDFile?: File | null;
+  threeDFile?: File | null;
+}
+
+// Zod validation schema
+const productValidationSchema = z.object({
+  codeNumber: z.string().min(1, "Code Number is required"),
+  title: z.string().min(1, "Title is required"),
+  category: z.string().min(1, "Category is required"),
+  twoDFile: z.any().optional(),
+  threeDFile: z.any().optional(),
+});
+
+// Reused FileUpload component from CreateProduct
+interface FileUploadProps {
+  name: string;
+  label: string;
+  accept: string;
+  required?: boolean;
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({
+  name,
+  label,
+  accept,
+  required,
+}) => {
+  const { control } = useFormContext();
+  const { field } = useController({ name, control });
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles && acceptedFiles.length > 0) {
+        field.onChange(acceptedFiles[0]);
+      }
+    },
+    [field]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { [accept]: [] },
+    multiple: false,
+  });
+
+  return (
+    <Box sx={{ width: "100%", mb: 2 }}>
+      <Paper
+        {...getRootProps()}
+        sx={{
+          p: 1,
+          border: "2px dashed",
+          borderColor: isDragActive ? "primary.main" : "grey.400",
+          borderRadius: 1,
+          textAlign: "center",
+          cursor: "pointer",
+          backgroundColor: isDragActive ? "primary.light" : "background.paper",
+          "&:hover": {
+            borderColor: "primary.main",
+            backgroundColor: "action.hover",
+          },
+          minHeight: 60,
+        }}
+        elevation={0}
+      >
+        <input {...getInputProps()} required={required} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <CloudUploadIcon sx={{ fontSize: 24, color: "primary.main" }} />
+          <Box>
+            <Typography variant="body2" color="text.primary">
+              {isDragActive ? "Drop here" : `${label}`}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {`(${accept})`}
+            </Typography>
+            {field.value && (
+              <Typography variant="caption" color="success.main">
+                {field.value.name}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
+  );
+};
+
 const ProductsTable = () => {
   const { data, isLoading } = useGetAllProductsQuery({});
   const [updateProduct] = useUpdateProductMutation();
@@ -42,97 +158,94 @@ const ProductsTable = () => {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [updateRow, setUpdateRow] = useState<TProduct | null>(null);
-  const [twoDFile, setTwoDFile] = useState<File | null>(null);
-  const [threeDFile, setThreeDFile] = useState<File | null>(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
+
+  // Initialize useForm with resolver
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(productValidationSchema),
+    defaultValues: {
+      codeNumber: "",
+      title: "",
+      category: "",
+      twoDFile: null,
+      threeDFile: null,
+    },
+  });
+
+  // Reset form values when updateRow changes
+  useEffect(() => {
+    if (updateRow) {
+      methods.reset({
+        codeNumber: updateRow.codeNumber,
+        title: updateRow.title,
+        category: updateRow.category,
+        twoDFile: null,
+        threeDFile: null,
+      });
+    } else {
+      methods.reset({
+        codeNumber: "",
+        title: "",
+        category: "",
+        twoDFile: null,
+        threeDFile: null,
+      });
+    }
+  }, [updateRow, methods]);
 
   const handleAdd = () => {
     setOpenCreateDialog(true);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleCreateClose = () => {
-    setOpenCreateDialog(false);
   };
 
   const handleDelete = async () => {
     if (deleteId !== null) {
       try {
         await deleteProduct(deleteId).unwrap();
+        toast.success("Product deleted successfully!");
         setDeleteId(null);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Delete failed:", error);
-        alert("Failed to delete product.");
+        toast.error("Failed to delete product.");
       }
     }
   };
 
   const handleUpdateOpen = (row: TProduct) => {
     setUpdateRow(row);
-    setTwoDFile(null);
-    setThreeDFile(null);
   };
 
   const handleUpdateClose = () => {
     setUpdateRow(null);
-    setTwoDFile(null);
-    setThreeDFile(null);
   };
 
-  const handleUpdateSave = async () => {
+  const handleUpdateSave: SubmitHandler<FormValues> = async (values) => {
     if (updateRow) {
-      if (
-        !updateRow.codeNumber.trim() ||
-        !updateRow.title.trim() ||
-        !updateRow.category.trim()
-      ) {
-        alert("Code Number, Title, and Category are required.");
-        return;
-      }
       try {
-        const formData = new FormData();
-        formData.append("codeNumber", updateRow.codeNumber);
-        formData.append("title", updateRow.title);
-        formData.append("category", updateRow.category);
-        if (twoDFile) formData.append("twoDUrl", twoDFile);
-        if (threeDFile) formData.append("threeDUrl", threeDFile);
-
+        const payload = {
+          codeNumber: values.codeNumber,
+          title: values.title,
+          category: values.category,
+          twoDFile: values.twoDFile || undefined,
+          threeDFile: values.threeDFile || undefined,
+        };
+        const formData = modifyPayload(payload);
         await updateProduct({
           id: updateRow._id,
           body: formData,
         }).unwrap();
+        toast.success("Product updated successfully!");
         setUpdateRow(null);
-        setTwoDFile(null);
-        setThreeDFile(null);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Update failed:", error);
-        alert("Failed to update product.");
+        toast.error(error?.message || "Failed to update product.");
       }
     }
   };
 
-  const handleUpdateChange = (field: keyof TProduct, value: string) => {
-    if (updateRow) {
-      setUpdateRow({ ...updateRow, [field]: value });
-    }
-  };
-
   const columns: GridColDef[] = [
-    {
-      field: "codeNumber",
-      headerName: "Code Number",
-      flex: 1,
-    },
-    {
-      field: "title",
-      headerName: "Title",
-      flex: 1,
-    },
-    {
-      field: "category",
-      headerName: "Category",
-      flex: 1,
-    },
+    { field: "codeNumber", headerName: "Code Number", flex: 1 },
+    { field: "title", headerName: "Title", flex: 1 },
+    { field: "category", headerName: "Category", flex: 1 },
     {
       field: "operation",
       headerName: "Operation",
@@ -205,58 +318,75 @@ const ProductsTable = () => {
         <DialogTitle>Update Product</DialogTitle>
         <DialogContent>
           <DialogContentText>Edit the product details below.</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Code Number"
-            fullWidth
-            value={updateRow?.codeNumber || ""}
-            onChange={(e) => handleUpdateChange("codeNumber", e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Title"
-            fullWidth
-            value={updateRow?.title || ""}
-            onChange={(e) => handleUpdateChange("title", e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Category"
-            fullWidth
-            value={updateRow?.category || ""}
-            onChange={(e) => handleUpdateChange("category", e.target.value)}
-            required
-          />
-          <Box sx={{ mt: 2 }}>
-            <label htmlFor="twoDUrl">2D Model</label>
-            <input
-              type="file"
-              id="twoDUrl"
-              accept="image/*"
-              onChange={(e) => setTwoDFile(e.target.files?.[0] || null)}
-              style={{ display: "block", marginTop: "8px" }}
-            />
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <label htmlFor="threeDUrl">3D Model (GLB/GLTF)</label>
-            <input
-              type="file"
-              id="threeDUrl"
-              accept=".glb,.gltf"
-              onChange={(e) => setThreeDFile(e.target.files?.[0] || null)}
-              style={{ display: "block", marginTop: "8px" }}
-            />
-          </Box>
+          <FormProvider {...methods}>
+            <PHForm
+              onSubmit={
+                methods.handleSubmit(
+                  handleUpdateSave
+                ) as SubmitHandler<FieldValues>
+              }
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  mt: 2,
+                }}
+              >
+                <TextField
+                  {...methods.register("codeNumber")}
+                  label="Code Number"
+                  fullWidth
+                  required
+                  error={!!methods.formState.errors.codeNumber}
+                  helperText={methods.formState.errors.codeNumber?.message}
+                />
+                <TextField
+                  {...methods.register("title")}
+                  label="Title"
+                  fullWidth
+                  required
+                  error={!!methods.formState.errors.title}
+                  helperText={methods.formState.errors.title?.message}
+                />
+                <TextField
+                  {...methods.register("category")}
+                  label="Category"
+                  fullWidth
+                  required
+                  error={!!methods.formState.errors.category}
+                  helperText={methods.formState.errors.category?.message}
+                />
+                <FileUpload
+                  name="twoDFile"
+                  label="2D Image"
+                  accept="image/*"
+                  required={false}
+                />
+                <FileUpload
+                  name="threeDFile"
+                  label="3D Model"
+                  accept=".glb,.gltf"
+                  required={false}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 1,
+                    mt: 2,
+                  }}
+                >
+                  <Button onClick={handleUpdateClose}>Cancel</Button>
+                  <Button type="submit" color="primary">
+                    Save
+                  </Button>
+                </Box>
+              </Box>
+            </PHForm>
+          </FormProvider>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleUpdateClose}>Cancel</Button>
-          <Button onClick={handleUpdateSave} color="primary">
-            Save
-          </Button>
-        </DialogActions>
       </Dialog>
     </Box>
   );

@@ -1,5 +1,6 @@
 export enum tagTypes {
   admin = "admin",
+  buyer = "buyer",
   product = "product",
   disclaimer = "disclaimer",
   trainingVideo = "trainingVideo",
@@ -8,6 +9,7 @@ export enum tagTypes {
 
 export const tagTypesList = [
   tagTypes.admin,
+  tagTypes.buyer,
   tagTypes.product,
   tagTypes.disclaimer,
   tagTypes.trainingVideo,

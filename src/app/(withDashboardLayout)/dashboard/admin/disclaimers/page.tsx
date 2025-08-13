@@ -1,7 +1,9 @@
+import DisclaimersTable from "@/components/Ui/Admin/ManageDisclaimer/DisclaimersTable";
+
 const ManageDisclaimers = () => {
   return (
     <div>
-      <h1>This is Disclaimer Page</h1>
+      <DisclaimersTable />
     </div>
   );
 };

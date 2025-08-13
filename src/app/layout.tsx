@@ -5,7 +5,7 @@ import Providers from "@/lib/Providers/Providers";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Home & Industriial",
+  title: "Home & Industrial", // Fixed typo in "Industriial"
   description: "All 3D models for Home & Industrial",
 };
 
@@ -15,14 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-arp="">
       <body suppressHydrationWarning>
         <Providers>
           <AppRouterCacheProvider>
-            <>
-              <Toaster position="top-center" />
-              {children}
-            </>
+            <Toaster position="top-center" />
+            {children}
           </AppRouterCacheProvider>
         </Providers>
       </body>

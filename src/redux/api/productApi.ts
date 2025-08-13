@@ -51,7 +51,7 @@ export const productApi = baseApi.injectEndpoints({
           data: data.body,
         };
       },
-      invalidatesTags: [tagTypes.product, tagTypes.user],
+      invalidatesTags: [tagTypes.product],
     }),
 
     //delete Product
