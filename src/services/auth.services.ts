@@ -46,6 +46,7 @@ export const removeUser = () => {
 export const getNewAccessToken = async () => {
   return await axiosInstance({
     url: "https://3dmodels.hice.com.au/api/v1/auth/refresh-token",
+    // url: "http://localhost:5000/api/v1/auth/refresh-token",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
