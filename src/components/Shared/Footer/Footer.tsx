@@ -1,9 +1,12 @@
+"use client";
+
 import { Box, Container, Stack, Typography, IconButton } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import Link from "next/link";
+import { useTheme } from "@mui/material/styles";
 
 const services = [
   "Site Classification & Footing Designs",
@@ -17,8 +20,15 @@ const services = [
 ];
 
 const Footer = () => {
+  const theme = useTheme();
+
   return (
-    <Box bgcolor="rgb(17, 26, 34)" py={5}>
+    <Box
+      sx={{
+        background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+        py: 5,
+      }}
+    >
       <Container>
         <Box
           display="flex"

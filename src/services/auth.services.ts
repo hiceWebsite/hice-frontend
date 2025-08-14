@@ -17,15 +17,18 @@ export const storeUserInfo = ({ accessToken }: { accessToken: string }) => {
 
 export const getUserInfo = () => {
   const authToken = getFromLocalStorage(authKey);
-  //   console.log(authToken);
-  if (authToken) {
+  if (!authToken) return null;
+
+  try {
     const decodedData: any = decodedToken(authToken);
     return {
+      email: decodedData?.userEmail || null,
+      role: decodedData?.role?.toLowerCase() || null,
       ...decodedData,
-      role: decodedData?.role?.toLowerCase(),
     };
-  } else {
-    return "";
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return null;
   }
 };
 

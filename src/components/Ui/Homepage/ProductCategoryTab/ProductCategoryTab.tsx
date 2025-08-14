@@ -7,7 +7,7 @@ import { Container } from "@mui/material";
 const ProductCategoryTab = () => {
   const { data, isLoading } = useGetAllProductsQuery({});
 
-  console.log(data);
+  // console.log(data);
   const products = data?.products || [];
 
   // console.log(doctors);

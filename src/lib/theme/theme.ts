@@ -15,6 +15,15 @@ export const theme = createTheme({
       defaultProps: {
         variant: "contained",
       },
+      styleOverrides: {
+        contained: {
+          background: "linear-gradient(90deg, #00AEEF 0%, #0C2E6E 100%)",
+          color: "#fff",
+          "&:hover": {
+            background: "linear-gradient(90deg, #0C2E6E 0%, #00AEEF 100%)",
+          },
+        },
+      },
     },
     MuiContainer: {
       defaultProps: {

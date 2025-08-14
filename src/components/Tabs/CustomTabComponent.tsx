@@ -33,9 +33,9 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     backgroundColor: theme.palette.grey[100],
   },
   "&.Mui-selected": {
-    backgroundColor: "#00AEEF",
+    background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
     color: "white",
-    border: `1px solid #00AEEF`,
+    border: "none",
   },
 }));
 
