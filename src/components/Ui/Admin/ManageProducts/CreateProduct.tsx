@@ -2,20 +2,22 @@
 import React, { useCallback, useState } from "react";
 import {
   Box,
-  Typography,
   Paper,
   Backdrop,
   CircularProgress,
+  Typography,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { FieldValues, useController, useFormContext } from "react-hook-form";
+import { FieldValues, useFormContext, useController } from "react-hook-form";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
+import PHSelectField from "@/components/Forms/PHSelectField";
 import PHFullScreenModal from "@/components/Shared/PHModal/PHFullScreenModal";
 import { useCreateProductMutation } from "@/redux/api/productApi";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { PRODUCT_CATEGORIES } from "@/constants/categories";
 
 // ----------------- File Upload Component -----------------
 interface FileUploadProps {
@@ -176,7 +178,14 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
         >
           <PHInput name="codeNumber" label="Code Number" fullWidth required />
           <PHInput name="title" label="Title" fullWidth required />
-          <PHInput name="category" label="Category" fullWidth required />
+          <PHSelectField
+            name="category"
+            label="Category"
+            items={Object.values(PRODUCT_CATEGORIES)}
+            fullWidth
+            required
+            size="small"
+          />
           <FileUpload
             name="twoDFile"
             label="2D Image"
