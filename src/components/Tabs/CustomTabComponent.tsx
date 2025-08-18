@@ -82,6 +82,7 @@ const CustomTabPanel: React.FC<TabPanelProps> = ({
                         height="100%"
                         width="100%"
                         adjustCamera={1.3}
+                        enableZoom={false}
                       />
                     </Box>
                     <Typography

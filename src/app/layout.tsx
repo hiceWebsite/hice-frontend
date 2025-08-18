@@ -19,7 +19,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Providers>
           <AppRouterCacheProvider>
-            <Toaster position="top-center" />
+            <Toaster position="bottom-center" />
             {children}
           </AppRouterCacheProvider>
         </Providers>

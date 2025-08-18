@@ -23,6 +23,16 @@ export const theme = createTheme({
             background: "linear-gradient(90deg, #0C2E6E 0%, #00AEEF 100%)",
           },
         },
+
+        root: {
+          "&.logout-button": {
+            backgroundColor: "#f44336",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#d32f2f",
+            },
+          },
+        },
       },
     },
     MuiContainer: {

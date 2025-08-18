@@ -1,4 +1,3 @@
-// app/(withCommonLayout)/product/[productId]/client.tsx
 "use client";
 
 import ThreeModelViewer from "@/components/ThreeModelViewer/ThreeModelViewer";

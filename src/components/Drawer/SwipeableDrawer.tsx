@@ -59,7 +59,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({ productId }) => {
                   variant="h6"
                   sx={{ fontWeight: 600, color: "#6b6b6b" }}
                 >
-                  2D Model
+                  2D Detail
                 </Typography>
                 <Box
                   sx={{

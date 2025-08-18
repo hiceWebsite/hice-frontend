@@ -26,18 +26,14 @@ const AuthButton = () => {
   if (userInfo === undefined) return null;
 
   return userInfo?.userEmail ? (
-    <Button
-      color="error"
-      onClick={handleLogout}
-      sx={{ color: "#fff", fontWeight: 600 }}
-    >
+    <button onClick={handleLogout} className="mui-btn mui-btn--contained-error">
       Logout
-    </Button>
+    </button>
   ) : (
     <Button
       component={Link}
       href="/login"
-      sx={{ color: "#fff", fontWeight: 600 }}
+      sx={{ color: "#fff", fontWeight: 600, textTransform: "none" }}
     >
       Login
     </Button>

@@ -308,9 +308,12 @@ const ProductsTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteId(null)}>Cancel</Button>
-          <Button color="error" onClick={handleDelete}>
-            Delete
-          </Button>
+          <button
+            onClick={handleDelete}
+            className="mui-btn mui-btn--contained-error"
+          >
+            DELETE
+          </button>
         </DialogActions>
       </Dialog>
 

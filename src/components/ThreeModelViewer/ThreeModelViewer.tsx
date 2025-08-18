@@ -3,13 +3,14 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stage, useGLTF } from "@react-three/drei";
 import React, { Suspense } from "react";
-// import backgroundImage from "@/assets/model-bg.jpg";
+import backgroundImage from "@/assets/product-bg.webp";
 
 type ModelProps = {
   modelUrl: string;
   width?: string;
   height?: string;
   adjustCamera?: number;
+  enableZoom?: boolean;
 };
 
 function Model({ url }: { url: string }) {
@@ -22,16 +23,17 @@ export default function ThreeModelViewer({
   width = "100%",
   height = "100%",
   adjustCamera = 5,
+  enableZoom = true,
 }: ModelProps) {
   return (
     <div
       style={{
         width,
         height,
-        backgroundColor: "#F0F2F0",
-        // backgroundImage: `url(${backgroundImage.src || backgroundImage})`,
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
+        // backgroundColor: "#F0F2F0",
+        backgroundImage: `url(${backgroundImage.src || backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         position: "relative",
       }}
     >
@@ -42,7 +44,7 @@ export default function ThreeModelViewer({
           width: "100%",
           height: "100%",
           backgroundColor: "transparent",
-          cursor: "grab",
+          cursor: enableZoom ? "grab" : "pointer",
         }}
         shadows={false}
       >
@@ -55,7 +57,12 @@ export default function ThreeModelViewer({
           >
             <Model url={modelUrl} />
           </Stage>
-          <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={true} />
+          <OrbitControls
+            autoRotate
+            autoRotateSpeed={1}
+            enableZoom={enableZoom}
+            rotateSpeed={2}
+          />
         </Suspense>
       </Canvas>
     </div>
