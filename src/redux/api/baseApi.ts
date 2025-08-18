@@ -19,8 +19,8 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: axiosBaseQuery({
     // baseUrl: process.env.NEXT_PUBLIC_API_URL || "/api/v1",
-    // baseUrl: "https://3dmodels.hice.com.au/api/v1"
-    baseUrl: "http://localhost:5000/api/v1",
+    baseUrl: "https://3dmodels.hice.com.au/api/v1",
+    // baseUrl: "http://localhost:5000/api/v1",
   }),
   endpoints: () => ({}),
   tagTypes: tagTypesList,
