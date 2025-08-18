@@ -12,7 +12,7 @@ interface SwipeableDrawerProps {
 }
 
 const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({ productId }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const { data: productData, isLoading: isProductLoading } =
     useGetProductQuery(productId);
@@ -70,19 +70,28 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({ productId }) => {
                   }}
                 ></Box>
               </Box>
-              <a
-                href={productData.twoDUrl || "/placeholder-image.png"}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Box
+                sx={{
+                  width: "full",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                <Image
-                  src={productData.twoDUrl || "/placeholder-image.png"}
-                  alt={productData?.title}
-                  width={300}
-                  height={300}
-                  style={{ borderRadius: "8px", marginTop: "5px" }}
-                />
-              </a>
+                <a
+                  href={productData.twoDUrl || "/placeholder-image.png"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src={productData.twoDUrl || "/placeholder-image.png"}
+                    alt={productData?.title}
+                    width={300}
+                    height={300}
+                    style={{ borderRadius: "8px", marginTop: "5px" }}
+                  />
+                </a>
+              </Box>
             </Box>
 
             <Box sx={{ mt: 9 }}>

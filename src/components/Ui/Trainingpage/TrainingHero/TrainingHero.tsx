@@ -8,10 +8,16 @@ const TrainingHero = () => {
       sx={{
         position: "relative",
         width: "100%",
+        height: "267px",
         marginBottom: "50px",
       }}
     >
-      <Image src={heroBanner} alt="Hero Image" />
+      <Image
+        src={heroBanner}
+        alt="Hero Image"
+        fill
+        style={{ objectFit: "cover" }}
+      />
       <Box
         sx={{
           position: "absolute",

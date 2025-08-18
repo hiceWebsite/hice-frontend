@@ -2,6 +2,7 @@
 
 import { useGetProductQuery } from "@/redux/api/productApi";
 import { Box, Typography } from "@mui/material";
+import Image from "next/image";
 
 const ProductHeading = ({ productId }: { productId: string }) => {
   const { data: productData, isLoading: isProductLoading } =
@@ -45,6 +46,19 @@ const ProductHeading = ({ productId }: { productId: string }) => {
           <Typography variant="h6" sx={{ fontWeight: 500, color: "#fff" }}>
             {productData.category}
           </Typography>
+          <a
+            href={productData.twoDUrl || "/placeholder-image.png"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src={productData.twoDUrl || "/placeholder-image.png"}
+              alt={productData?.title}
+              width={300}
+              height={300}
+              style={{ borderRadius: "8px", marginTop: "5px" }}
+            />
+          </a>
         </Box>
       ) : (
         <Box sx={{ p: 2, color: "#fff" }}>Loading...</Box>
