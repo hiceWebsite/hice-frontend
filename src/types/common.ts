@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { USER_ROLE } from "@/constants/role";
 import { SvgIconTypeMap } from "@mui/material";
@@ -15,7 +16,6 @@ export interface DrawerItem {
   title: string;
   path: string;
   parentPath?: string;
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string };
   child?: DrawerItem[];
 }

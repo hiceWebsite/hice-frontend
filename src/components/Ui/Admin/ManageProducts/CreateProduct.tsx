@@ -123,10 +123,19 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
   const handleFormSubmit = async (values: FieldValues) => {
     const { codeNumber, title, category, twoDFile, threeDFile } = values;
 
-    if (!codeNumber || !title || !category || !twoDFile || !threeDFile) {
+    const upperCaseCodeNumber = codeNumber.toUpperCase();
+
+    if (
+      !upperCaseCodeNumber ||
+      !title ||
+      !category ||
+      !twoDFile ||
+      !threeDFile
+    ) {
       toast.error("All fields are required.");
       return;
     }
+
     if (!(twoDFile instanceof File) || !(threeDFile instanceof File)) {
       toast.error("Invalid file format for 2D or 3D file.");
       return;
@@ -134,7 +143,13 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
 
     try {
       setLoading(true);
-      const formData = modifyProductPayload(values);
+      const formData = modifyProductPayload({
+        codeNumber: upperCaseCodeNumber,
+        title,
+        category,
+        twoDFile,
+        threeDFile,
+      });
       const res = await createProduct(formData).unwrap();
       if (res?._id) {
         toast.success("Product created successfully!");

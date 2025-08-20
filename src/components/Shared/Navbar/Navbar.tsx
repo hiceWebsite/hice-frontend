@@ -11,6 +11,7 @@ import { getUserInfo } from "@/services/auth.services";
 
 const Navbar = () => {
   const [userInfo, setUserInfo] = useState<any | null>(undefined);
+  console.log("User Info:", userInfo?.role);
 
   useEffect(() => {
     const info = getUserInfo();
@@ -76,7 +77,8 @@ const Navbar = () => {
             >
               TRAINING
             </Typography>
-            {userInfo?.userEmail && (
+            {(userInfo?.role === "admin" ||
+              userInfo?.role === "superAdmin") && (
               <Typography
                 component={Link}
                 href="/dashboard"

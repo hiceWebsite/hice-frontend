@@ -21,8 +21,20 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
         },
         {
           title: "Manage Users",
-          path: `${role}/manage-users`,
+          path: `superadmin/manage-users`,
           icon: GroupIcon,
+          child: [
+            {
+              title: "Admins",
+              path: `superadmin/manage-users/admins`,
+              parentPath: `${role}/manage-users`,
+            },
+            {
+              title: "Buyers",
+              path: `superadmin/manage-users/buyers`,
+              parentPath: `${role}/manage-users`,
+            },
+          ],
         }
       );
       break;
@@ -38,6 +50,18 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
           title: "Manage Users",
           path: `${role}/manage-users`,
           icon: GroupIcon,
+          child: [
+            {
+              title: "Admins",
+              path: `${role}/manage-users/admins`,
+              parentPath: `${role}/manage-users`,
+            },
+            {
+              title: "Buyers",
+              path: `${role}/manage-users/buyers`,
+              parentPath: `${role}/manage-users`,
+            },
+          ],
         },
         {
           title: "Products",
@@ -57,13 +81,13 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
       );
       break;
 
-    case USER_ROLE.BUYER:
-      roleMenus.push({
-        title: "Dashboard",
-        path: `${role}`,
-        icon: DashboardIcon,
-      });
-      break;
+    // case USER_ROLE.BUYER:
+    //   roleMenus.push({
+    //     title: "Dashboard",
+    //     path: `${role}`,
+    //     icon: DashboardIcon,
+    //   });
+    //   break;
 
     default:
       break;

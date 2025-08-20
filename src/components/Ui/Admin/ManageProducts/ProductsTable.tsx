@@ -222,7 +222,7 @@ const ProductsTable = () => {
     if (updateRow) {
       try {
         const payload = {
-          codeNumber: values.codeNumber,
+          codeNumber: values.codeNumber.toUpperCase(),
           title: values.title,
           category: values.category,
           twoDFile: values.twoDFile || undefined,
@@ -338,7 +338,9 @@ const ProductsTable = () => {
                 }}
               >
                 <TextField
-                  {...methods.register("codeNumber")}
+                  {...methods.register("codeNumber", {
+                    setValueAs: (value: string) => value.toUpperCase(),
+                  })}
                   label="Code Number"
                   fullWidth
                   required

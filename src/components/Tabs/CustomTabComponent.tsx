@@ -88,14 +88,14 @@ const CustomTabPanel: React.FC<TabPanelProps> = ({
                     <Typography
                       variant="subtitle2"
                       color="text.secondary"
-                      mt={2}
+                      mt={3}
                     >
                       {product.codeNumber}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
-                      mt={2}
+                      mt={-1}
                     >
                       {product.category}
                     </Typography>
@@ -104,6 +104,7 @@ const CustomTabPanel: React.FC<TabPanelProps> = ({
                       textAlign="center"
                       mt={1}
                       color="text.secondary"
+                      sx={{ fontWeight: "bold", fontSize: "1.1rem" }}
                     >
                       {product.title}
                     </Typography>

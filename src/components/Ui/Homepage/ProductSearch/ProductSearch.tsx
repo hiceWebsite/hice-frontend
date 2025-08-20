@@ -29,7 +29,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     debounce((value: string) => {
-      setSearchTerm(value);
+      setSearchTerm(value.toUpperCase());
     }, 500),
     []
   );
@@ -84,6 +84,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect }) => {
           variant="outlined"
           InputProps={{
             ...params.InputProps,
+            style: { textTransform: "uppercase" },
             endAdornment: (
               <>
                 {(loading || selectLoading) && (

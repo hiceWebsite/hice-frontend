@@ -1,8 +1,24 @@
-export type TTrainingVideo = {
+export type TAdmin = {
   _id: string;
-  title: string;
-  videoUrl: string;
+  user: {
+    _id: string;
+    email: string;
+    needsPasswordChange: boolean;
+    role: "admin";
+    status: string;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  name: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
+  email: string;
+  profileImg: string;
   isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
+  fullName: string;
+  id: string;
 };
