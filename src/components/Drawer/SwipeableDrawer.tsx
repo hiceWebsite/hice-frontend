@@ -91,6 +91,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                       alt={productData?.title}
                       width={300}
                       height={300}
+                      unoptimized
                       style={{ borderRadius: "8px", marginTop: "5px" }}
                     />
                   </a>
