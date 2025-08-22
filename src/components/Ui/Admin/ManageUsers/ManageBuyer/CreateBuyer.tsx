@@ -18,7 +18,7 @@ type TProps = {
 
 const buyerValidationSchema = z.object({
   password: z.string().min(5, "Password must be at least 5 characters"),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
+  email: z.email("Invalid email").min(1, "Email is required"),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   address: z.string().optional(),
@@ -98,7 +98,7 @@ const CreateBuyer = ({ open, setOpen }: TProps) => {
           <PHInput name="firstName" label="First Name" fullWidth required />
           <PHInput name="lastName" label="Last Name" fullWidth required />
           <PHInput name="email" label="Email" type="email" fullWidth required />
-          <PHInput name="address" label="Address" fullWidth /> {/* NEW */}
+          <PHInput name="address" label="Address" fullWidth />
           <PHInput
             name="password"
             label="Password"

@@ -33,7 +33,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
         variant="persistent"
         sx={{
           "& .MuiDrawer-paper": {
-            width: isOpen ? 525 : 100,
+            width: isOpen ? 560 : 100,
             backgroundColor: "#fcfcfc",
             transition: "width 0.3s ease-in-out",
             position: "absolute",
@@ -47,12 +47,12 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
         }}
       >
         {!isProductLoading ? (
-          <Box>
+          <Box sx={{ overflow: "hidden" }}>
             <Box sx={{ display: isOpen ? "block" : "none" }}>
               <ProductHeading productId={productId} />
             </Box>
             <Box
-              sx={{ pt: 5, pl: 6, pr: 10, display: isOpen ? "block" : "none" }}
+              sx={{ pt: 4, pl: 6, pr: 10, display: isOpen ? "block" : "none" }}
             >
               <Box sx={{}}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -74,7 +74,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                 <Box
                   sx={{
                     width: "full",
-                    height: "350px",
+                    maxHeight: "350px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -89,16 +89,22 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                     <Image
                       src={productData.twoDUrl || "/placeholder-image.png"}
                       alt={productData?.title}
-                      width={300}
-                      height={300}
+                      width={0} // let Next.js ignore fixed width
+                      height={0} // let Next.js ignore fixed height
                       unoptimized
-                      style={{ borderRadius: "8px", marginTop: "5px" }}
+                      style={{
+                        maxHeight: "350px",
+                        width: "auto",
+                        height: "100%",
+                        borderRadius: "8px",
+                        marginTop: "5px",
+                      }}
                     />
                   </a>
                 </Box>
               </Box>
 
-              <Box sx={{ mt: 9 }}>
+              <Box sx={{ mt: 4 }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography
                     variant="h6"
@@ -115,7 +121,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                     }}
                   ></Box>
                 </Box>
-                <Stack spacing={2}>
+                <Stack spacing={0}>
                   {isDisclaimerLoading ? (
                     <Typography
                       variant="body2"

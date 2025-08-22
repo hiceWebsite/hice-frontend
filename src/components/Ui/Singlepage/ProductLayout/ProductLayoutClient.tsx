@@ -3,7 +3,7 @@
 import { Box, useTheme } from "@mui/material";
 import { useState } from "react";
 import SwipeableDrawer from "@/components/Drawer/SwipeableDrawer";
-import ProductPageClient from "@/app/(withCommonLayout)/product/[productId]/singleProductPage";
+import ProductPageClient from "@/app/product/[productId]/singleProductPage";
 
 export default function ProductLayoutClient({
   productId,
@@ -33,7 +33,7 @@ export default function ProductLayoutClient({
         sx={{
           ml: `${drawerWidth}px`,
           width: `calc(100vw - ${drawerWidth}px)`,
-          height: "100vh",
+          height: "calc(100vh - 100px)",
           transition: theme.transitions.create(["margin-left", "width"], {
             duration: theme.transitions.duration.standard,
             easing: theme.transitions.easing.easeInOut,

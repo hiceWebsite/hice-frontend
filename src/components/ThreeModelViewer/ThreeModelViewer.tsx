@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stage, useGLTF } from "@react-three/drei";
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import backgroundImage from "@/assets/product-bg.webp";
 
 type ModelProps = {
@@ -103,7 +103,7 @@ export default function ThreeModelViewer({
   minZoom = 1,
   maxZoom = 90,
 }: ModelProps) {
-  const [hasInteracted, setHasInteracted] = useState(false);
+  // const [hasInteracted, setHasInteracted] = useState(false);
 
   return (
     <div
@@ -132,43 +132,43 @@ export default function ThreeModelViewer({
         shadows
       >
         {/* lighting */}
-        <ambientLight intensity={-3} color="#000000" /> {/* Top */}{" "}
+        <ambientLight intensity={-3} color="#000000" /> {/* Top */}
         <directionalLight
           position={[0, 20, 0]}
           intensity={0.8}
           castShadow
-          color="#000000"
-        />{" "}
-        {/* Bottom */}{" "}
+          color="#ffffff"
+        />
+        {/* Bottom */}
         <directionalLight
           position={[0, -20, 0]}
           intensity={0.5}
-          color="#000000"
-        />{" "}
-        {/* Left */}{" "}
+          color="#ffffff"
+        />
+        {/* Left */}
         <directionalLight
           position={[-20, 0, 0]}
-          intensity={0.6}
-          color="#000000"
-        />{" "}
-        {/* Right */}{" "}
+          intensity={2}
+          color="#ffffff"
+        />
+        {/* Right */}
         <directionalLight
           position={[20, 0, 0]}
           intensity={0.6}
-          color="#000000"
-        />{" "}
-        {/* Front (toward camera) */}{" "}
+          color="#ffffff"
+        />
+        {/* Front (toward camera) */}
         <directionalLight
           position={[0, 0, 20]}
           intensity={0.7}
-          color="#000000"
-        />{" "}
-        {/* Back */}{" "}
+          color="#ffffff"
+        />
+        {/* Back */}
         <directionalLight
           position={[0, 0, -20]}
-          intensity={1.5}
+          intensity={1}
           color="#ffffff"
-        />{" "}
+        />
         <directionalLight
           position={[0, 20, -20]}
           intensity={1.5}
@@ -188,13 +188,14 @@ export default function ThreeModelViewer({
           </Stage>
 
           <OrbitControls
-            autoRotate={!hasInteracted}
+            // autoRotate={!hasInteracted}
+            autoRotate
             autoRotateSpeed={1}
             enableZoom={enableZoom}
             rotateSpeed={2}
             minDistance={minZoom}
             maxDistance={maxZoom}
-            onStart={() => setHasInteracted(true)} // detect drag
+            // onStart={() => setHasInteracted(true)} // detect drag
           />
         </Suspense>
       </Canvas>

@@ -10,7 +10,7 @@ const ProductHeading = ({ productId }: { productId: string }) => {
   return (
     <Box
       sx={{
-        height: "170px",
+        padding: 3,
         width: "100%",
         background: "linear-gradient(45deg, #00AEEF, #0C2E6E)",
         display: "flex",
@@ -28,7 +28,10 @@ const ProductHeading = ({ productId }: { productId: string }) => {
             flexDirection: "column",
           }}
         >
-          <Typography variant="body1" sx={{ fontWeight: 400, color: "#fff" }}>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 400, color: "#fff", fontSize: "14px" }}
+          >
             {productData.codeNumber || "Please put the code number"}
           </Typography>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "#fff" }}>
@@ -39,10 +42,13 @@ const ProductHeading = ({ productId }: { productId: string }) => {
               height: "2px",
               width: "40%",
               backgroundColor: "white",
-              marginTop: 1,
+              margin: "4px 0",
             }}
           ></Box>
-          <Typography variant="h6" sx={{ fontWeight: 500, color: "#fff" }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 500, color: "#fff", fontSize: "18px" }}
+          >
             {productData.category}
           </Typography>
         </Box>

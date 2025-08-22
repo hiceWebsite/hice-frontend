@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
-// import ProductHeading from "@/components/Ui/Singlepage/ProductHeading/ProductHeading";
 import ProductLayoutClient from "@/components/Ui/Singlepage/ProductLayout/ProductLayoutClient";
+import Navbar from "@/components/Shared/Navbar/Navbar";
+import Footer from "@/components/Shared/Footer/Footer";
 
 const productPage = async ({
   params,
@@ -10,9 +11,12 @@ const productPage = async ({
   const { productId } = await params;
 
   return (
-    <Box sx={{ minHeight: "100vh" }}>
-      {/* <ProductHeading productId={productId} /> */}
-      <ProductLayoutClient productId={productId} />
+    <Box>
+      <Navbar />
+      <Box sx={{ pt: "90px" }}>
+        <ProductLayoutClient productId={productId} />
+      </Box>
+      <Footer />
     </Box>
   );
 };
