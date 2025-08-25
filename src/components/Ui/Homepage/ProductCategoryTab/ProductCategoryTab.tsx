@@ -1,5 +1,6 @@
 "use client";
 
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 import CustomTabComponent from "@/components/Tabs/CustomTabComponent";
 import { useGetAllProductsQuery } from "@/redux/api/productApi";
 import { Container } from "@mui/material";
@@ -17,7 +18,7 @@ const ProductCategoryTab = () => {
       {!isLoading ? (
         <CustomTabComponent products={products} sx={{}} />
       ) : (
-        <h1>Loading.....</h1>
+        <CircleLoading />
       )}
     </Container>
   );

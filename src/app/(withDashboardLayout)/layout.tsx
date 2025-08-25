@@ -4,7 +4,9 @@ import DashboardDrawer from "@/components/Dashboard/DashboardDrawer/DashboardDra
 import { getUserInfo, isLoggedIn } from "@/services/auth.services";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import NotFound from "@/app/not-found"; // ✅ import the 404 page
+import NotFound from "@/app/not-found";
+import { Box } from "@mui/material";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [userInfo, setUserInfo] = useState<any | null>(undefined);
@@ -22,11 +24,25 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, [router]);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircleLoading />
+      </Box>
+    );
+  }
 
   // if role is NOT admin or superAdmin → show 404
   if (!(userInfo?.role === "admin" || userInfo?.role === "superAdmin")) {
-    return <NotFound />; // ✅ renders your /app/not-found.tsx
+    return <NotFound />;
   }
 
   return <DashboardDrawer>{children}</DashboardDrawer>;

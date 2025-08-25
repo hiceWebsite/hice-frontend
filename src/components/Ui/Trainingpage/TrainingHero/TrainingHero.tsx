@@ -37,7 +37,7 @@ const TrainingHero = () => {
         }}
       >
         <Typography variant="h3" component="h1" sx={{ fontWeight: 600 }}>
-          Training & Resources
+          Instructions & Resources
         </Typography>
       </Box>
     </Box>

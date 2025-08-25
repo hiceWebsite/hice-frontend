@@ -10,7 +10,20 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+
+    //Change Password
+    changePassword: build.mutation({
+      query: (data) => {
+        console.log(data.body);
+        return {
+          url: `/auth/change-password`,
+          method: "POST",
+          data: data.body,
+        };
+      },
+      invalidatesTags: [tagTypes.user],
+    }),
   }),
 });
 
-export const { useGetSingleUserQuery } = userApi;
+export const { useGetSingleUserQuery, useChangePasswordMutation } = userApi;

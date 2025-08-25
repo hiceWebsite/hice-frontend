@@ -1,9 +1,14 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage, useGLTF } from "@react-three/drei";
+import { OrbitControls, Stage, useGLTF, Html } from "@react-three/drei";
 import React, { Suspense } from "react";
 import backgroundImage from "@/assets/product-bg.webp";
+import { Box, CircularProgress } from "@mui/material";
+import {
+  BrightnessContrast,
+  EffectComposer,
+} from "@react-three/postprocessing";
 
 type ModelProps = {
   modelUrl: string;
@@ -132,29 +137,32 @@ export default function ThreeModelViewer({
         shadows
       >
         {/* lighting */}
-        <ambientLight intensity={-3} color="#000000" /> {/* Top */}
+        <ambientLight intensity={0.6} color="#ffffff" />
+
+        <hemisphereLight args={["#ffffff", "#ffffff", -1]} />
+
+        {/* Top */}
         <directionalLight
           position={[0, 20, 0]}
           intensity={0.8}
-          castShadow
           color="#ffffff"
         />
         {/* Bottom */}
         <directionalLight
           position={[0, -20, 0]}
-          intensity={0.5}
+          intensity={2}
           color="#ffffff"
         />
         {/* Left */}
         <directionalLight
           position={[-20, 0, 0]}
-          intensity={2}
+          intensity={1.9}
           color="#ffffff"
         />
         {/* Right */}
         <directionalLight
           position={[20, 0, 0]}
-          intensity={0.6}
+          intensity={0.5}
           color="#ffffff"
         />
         {/* Front (toward camera) */}
@@ -166,21 +174,32 @@ export default function ThreeModelViewer({
         {/* Back */}
         <directionalLight
           position={[0, 0, -20]}
-          intensity={1}
+          intensity={2.2}
           color="#ffffff"
         />
-        <directionalLight
+        {/* <directionalLight
           position={[0, 20, -20]}
           intensity={1.5}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
-        />
+        /> */}
+        <EffectComposer>
+          <BrightnessContrast brightness={0} contrast={0.2} />
+        </EffectComposer>
         {/* <directionalLight position={[0, 20, 0]} intensity={0.2} color="#000000" /> */}
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <Html center>
+              <Box>
+                <CircularProgress sx={{ color: "#9e9e9e" }} />
+              </Box>
+            </Html>
+          }
+        >
           <Stage
-            environment="warehouse"
-            intensity={-4}
+            environment={"warehouse"}
+            intensity={-2}
             adjustCamera={adjustCamera}
             shadows
           >

@@ -13,6 +13,7 @@ import SideBar from "../SideBar/SideBar";
 import { Avatar, Stack } from "@mui/material";
 import AccountMenu from "../AccountMenu/AccountMenu";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
+// import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 const drawerWidth = 240;
 
@@ -39,27 +40,23 @@ export default function DashboardDrawer({
     }
   };
 
-  const { data, isLoading } = useGetSingleUserQuery({});
+  const { data } = useGetSingleUserQuery({});
 
   console.log("User Data:", data);
 
-  React.useEffect(() => {
-    // Log elements with unexpected attributes
-    const elements = document.querySelectorAll(
-      "div[id='GOOGLE_INPUT_CHEXT_FLAG']"
-    );
-    if (elements.length > 0) {
-      console.warn("Found elements with GOOGLE_INPUT_CHEXT_FLAG:", elements);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   // Log elements with unexpected attributes
+  //   const elements = document.querySelectorAll(
+  //     "div[id='GOOGLE_INPUT_CHEXT_FLAG']"
+  //   );
+  //   if (elements.length > 0) {
+  //     console.warn("Found elements with GOOGLE_INPUT_CHEXT_FLAG:", elements);
+  //   }
+  // }, []);
 
-  if (isLoading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
-        <Typography>Loading...</Typography>
-      </Box>
-    );
-  }
+  // if (isLoading) {
+  //   return <CircleLoading />;
+  // }
 
   return (
     <Box sx={{ display: "flex", marginTop: "20px" }}>

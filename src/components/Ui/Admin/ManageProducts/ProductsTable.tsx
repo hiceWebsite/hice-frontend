@@ -38,6 +38,7 @@ import { useDropzone } from "react-dropzone";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 type TProduct = {
   _id: string;
@@ -269,7 +270,11 @@ const ProductsTable = () => {
   ];
 
   if (isLoading) {
-    return <Box>Loading...</Box>;
+    return (
+      <Box sx={{ height: 700, width: "100%" }}>
+        <CircleLoading />;
+      </Box>
+    );
   }
 
   return (

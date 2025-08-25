@@ -1,8 +1,18 @@
+import { Button } from "@mui/material";
+import Link from "next/link";
+
 const DashboardHomePage = () => {
   return (
-    <div>
-      <h1>This is Dashboard page</h1>
-    </div>
+    <>
+      <Link
+        href="/dashboard/change-password"
+        style={{ textDecoration: "none" }}
+      >
+        <Button variant="contained" sx={{ mb: 2 }}>
+          Change Password
+        </Button>
+      </Link>
+    </>
   );
 };
 

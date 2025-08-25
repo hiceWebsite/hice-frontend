@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { PRODUCT_CATEGORIES } from "@/constants/categories";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // ----------------- File Upload Component -----------------
 interface FileUploadProps {
@@ -34,16 +35,32 @@ const FileUpload: React.FC<FileUploadProps> = ({
   required,
 }) => {
   const { control } = useFormContext();
-  const { field } = useController({ name, control });
+  const { field, fieldState } = useController({
+    name,
+    control,
+    rules: { required },
+  });
+  // ✅ added rules: { required } so RHF handles validation
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles?.length > 0) {
-        field.onChange(acceptedFiles[0]);
-      }
-    },
-    [field]
-  );
+  const [uploading, setUploading] = useState(false);
+
+  const uploadFile = async (file: File) => {
+    setUploading(true);
+
+    // store file in form state
+    field.onChange(file);
+
+    // simulate upload animation
+    setTimeout(() => {
+      setUploading(false);
+    }, 1500);
+  };
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles?.length > 0) {
+      uploadFile(acceptedFiles[0]);
+    }
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -51,15 +68,18 @@ const FileUpload: React.FC<FileUploadProps> = ({
     multiple: false,
   });
 
+  // ✅ derived state: uploaded is true if there's a value in RHF
+  const uploaded = !!field.value;
+
   return (
     <Box sx={{ width: "100%", mb: 2 }}>
       <Paper
         {...getRootProps()}
         sx={{
-          p: 1,
+          p: 2,
           border: "2px dashed",
           borderColor: isDragActive ? "primary.main" : "grey.400",
-          borderRadius: 1,
+          borderRadius: 2,
           textAlign: "center",
           cursor: "pointer",
           backgroundColor: isDragActive ? "primary.light" : "background.paper",
@@ -67,35 +87,57 @@ const FileUpload: React.FC<FileUploadProps> = ({
             borderColor: "primary.main",
             backgroundColor: "action.hover",
           },
-          minHeight: 60,
+          minHeight: 150,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 1,
         }}
         elevation={0}
       >
-        <input {...getInputProps()} required={required} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <CloudUploadIcon sx={{ fontSize: 24, color: "primary.main" }} />
-          <Box>
+        {/* ✅ removed `required` here, RHF handles it now */}
+        <input {...getInputProps()} />
+
+        {/* Upload states */}
+        {uploading ? (
+          <>
+            <CircularProgress color="primary" />
+            <Typography variant="body2" color="primary">
+              Uploading...
+            </Typography>
+          </>
+        ) : uploaded ? (
+          <>
+            <CheckCircleIcon sx={{ fontSize: 50, color: "success.main" }} />
+            <Typography variant="body2" color="success.main">
+              Uploaded successfully
+            </Typography>
+            {field.value && (
+              <Typography variant="caption" color="text.secondary">
+                {field.value.name}
+              </Typography>
+            )}
+          </>
+        ) : (
+          <>
+            <CloudUploadIcon sx={{ fontSize: 60, color: "primary.main" }} />
             <Typography variant="body2" color="text.primary">
               {isDragActive ? "Drop here" : label}
             </Typography>
             <Typography variant="caption" color="text.secondary">
               ({accept})
             </Typography>
-            {field.value && (
-              <Typography variant="caption" color="success.main">
-                {field.value.name}
-              </Typography>
-            )}
-          </Box>
-        </Box>
+          </>
+        )}
       </Paper>
+
+      {/* ✅ show RHF error instead of browser tooltip */}
+      {fieldState.error && (
+        <Typography variant="caption" color="error">
+          {label} is required
+        </Typography>
+      )}
     </Box>
   );
 };
@@ -218,8 +260,8 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
             <LoadingButton
               type="submit"
               variant="contained"
-              loading={loading}
-              disabled={loading}
+              // loading={loading}
+              // disabled={loading}
             >
               Create
             </LoadingButton>
@@ -234,9 +276,6 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
       >
         <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
           <CircularProgress color="inherit" />
-          <Typography variant="body1" fontWeight={500}>
-            Creating product, please wait...
-          </Typography>
         </Box>
       </Backdrop>
     </PHFullScreenModal>

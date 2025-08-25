@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Tabs, Tab, Card, Typography, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ThreeModelViewer from "../ThreeModelViewer/ThreeModelViewer";
 import { PRODUCT_CATEGORIES } from "@/constants/categories";
 import { TProduct } from "@/types/product";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface TabPanelProps {
   children: TProduct[];
@@ -126,6 +127,9 @@ const CustomTabComponent: React.FC<CustomTabsProps> = ({
 }) => {
   const [value, setValue] = useState(initialValue);
 
+  const searchParams = useSearchParams();
+  const categoryFromQuery = searchParams.get("category");
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -150,6 +154,14 @@ const CustomTabComponent: React.FC<CustomTabsProps> = ({
       label: PRODUCT_CATEGORIES.TIMBER_SUBFLOOR,
     },
   ];
+
+  useEffect(() => {
+    if (categoryFromQuery) {
+      const idx = categoryTab.findIndex((c) => c.label === categoryFromQuery);
+      if (idx !== -1) setValue(idx);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryFromQuery]);
 
   return (
     <Box sx={{ width: "100%", ...sx }}>

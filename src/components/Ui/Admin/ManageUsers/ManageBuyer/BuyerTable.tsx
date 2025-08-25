@@ -32,6 +32,7 @@ import {
   useUpdateBuyerMutation,
   useDeleteBuyerMutation,
 } from "@/redux/api/buyerApi";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 export type TBuyer = {
   _id: string;
@@ -181,7 +182,13 @@ const BuyersTable = () => {
     },
   ];
 
-  if (isLoading) return <Box>Loading...</Box>;
+  if (isLoading) {
+    return (
+      <Box sx={{ height: 700, width: "100%" }}>
+        <CircleLoading />;
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ height: 700, width: "100%" }}>

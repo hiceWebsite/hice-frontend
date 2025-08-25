@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { authKey } from "@/constants/authkey";
-import { instance as axiosInstance } from "@/helpers/axios/axiosInstance";
+// import { instance as axiosInstance } from "@/helpers/axios/axiosInstance";
 import { decodedToken } from "@/utils/jwt";
 
 import {
@@ -43,13 +43,13 @@ export const removeUser = () => {
   return removeFromLocalStorage(authKey);
 };
 
-export const getNewAccessToken = async () => {
-  return await axiosInstance({
-    url: "https://3dmodels.hice.com.au/api/v1/auth/refresh-token",
-    // url: `${process.env.NEXT_PUBLIC_API_URL || "/api/v1"}/auth/refresh-token`,
-    // url: "http://localhost:5000/api/v1/auth/refresh-token",
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-  });
-};
+// export const getNewAccessToken = async () => {
+//   return await axiosInstance({
+//     // url: "https://3dmodels.hice.com.au/api/v1/auth/refresh-token",
+//     // url: `${process.env.NEXT_PUBLIC_API_URL || "/api/v1"}/auth/refresh-token`,
+//     url: "http://localhost:5000/api/v1/auth/refresh-token",
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     withCredentials: true,
+//   });
+// };

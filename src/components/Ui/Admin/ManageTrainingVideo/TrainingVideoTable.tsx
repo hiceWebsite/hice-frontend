@@ -32,6 +32,7 @@ import {
   useGetAllTrainingVideosQuery,
   useUpdateTrainingVideoMutation,
 } from "@/redux/api/trainingApi";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 export type TTrainingVideo = {
   _id: string;
@@ -169,7 +170,11 @@ const TrainingVideosTable = () => {
   ];
 
   if (isLoading) {
-    return <Box>Loading...</Box>;
+    return (
+      <Box sx={{ height: 700, width: "100%" }}>
+        <CircleLoading />;
+      </Box>
+    );
   }
 
   return (

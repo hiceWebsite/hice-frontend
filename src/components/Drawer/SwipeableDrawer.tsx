@@ -6,6 +6,7 @@ import { useGetProductQuery } from "@/redux/api/productApi";
 import Image from "next/image";
 import { useGetAllDisclaimersQuery } from "@/redux/api/disclaimerApi";
 import ProductHeading from "../Ui/Singlepage/ProductHeading/ProductHeading";
+import CircleLoading from "../CircleLoading/CircleLoading";
 
 interface SwipeableDrawerProps {
   productId: string;
@@ -123,12 +124,9 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                 </Box>
                 <Stack spacing={0}>
                   {isDisclaimerLoading ? (
-                    <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 400, color: "#6b6b6b", mt: 1 }}
-                    >
-                      Loading disclaimers...
-                    </Typography>
+                    <Box sx={{ height: 150, width: "100%" }}>
+                      <CircleLoading />;
+                    </Box>
                   ) : (
                     disclaimerData?.disclaimers?.map((disclaimer, index) => (
                       <Box key={index} sx={{ display: "flex" }}>
@@ -208,8 +206,8 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
             </Box>
           </Box>
         ) : (
-          <Box sx={{ p: 2 }}>
-            <Typography variant="body1">Loading product details...</Typography>
+          <Box sx={{ height: "100%", width: "100%", pt: 45 }}>
+            <CircleLoading />;
           </Box>
         )}
         <Box

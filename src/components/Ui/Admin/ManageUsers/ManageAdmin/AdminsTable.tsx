@@ -32,6 +32,7 @@ import {
   useUpdateAdminMutation,
   useDeleteAdminMutation,
 } from "@/redux/api/adminApi";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 export type TAdmin = {
   _id: string;
@@ -194,7 +195,13 @@ const AdminsTable = () => {
     },
   ];
 
-  if (isLoading) return <Box>Loading...</Box>;
+  if (isLoading) {
+    return (
+      <Box sx={{ height: 700, width: "100%" }}>
+        <CircleLoading />;
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ height: 700, width: "100%" }}>

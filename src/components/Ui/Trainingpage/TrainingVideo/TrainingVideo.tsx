@@ -2,6 +2,7 @@
 
 import { Box, Container, Typography } from "@mui/material";
 import { useGetAllTrainingVideosQuery } from "@/redux/api/trainingApi";
+import CircleLoading from "@/components/CircleLoading/CircleLoading";
 
 const TrainingVideo = () => {
   const { data: TrainingVideosData, isLoading: isTrainingVideosLoading } =
@@ -12,7 +13,9 @@ const TrainingVideo = () => {
     <Container sx={{ pb: 6 }}>
       <Box>
         {isTrainingVideosLoading ? (
-          <Typography>Loading videos...</Typography>
+          <Box sx={{ display: "flex", justifyContent: "center", height: 300 }}>
+            <CircleLoading />
+          </Box>
         ) : !trainingVideos || trainingVideos.length === 0 ? (
           <Typography>No videos available</Typography>
         ) : (

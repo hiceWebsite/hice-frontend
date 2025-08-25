@@ -13,7 +13,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { userLogin } from "@/services/actions/userLogin";
 import { toast } from "sonner";
@@ -259,7 +259,7 @@ const LoginPage = () => {
                 },
               }}
             >
-              <Link href="/login">Forgot Password?</Link>
+              {/* <Link href="/login">Forgot Password?</Link> */}
             </Typography>
           </Box>
 

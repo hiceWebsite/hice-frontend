@@ -67,7 +67,7 @@ const Navbar = () => {
             </Typography>
             <Typography
               component={Link}
-              href="/training"
+              href="/instruction"
               sx={{
                 fontSize: "15px",
                 fontWeight: 600,
@@ -75,7 +75,7 @@ const Navbar = () => {
                 "&:hover": { color: "primary.main" },
               }}
             >
-              TRAINING
+              INSTRUCTION
             </Typography>
             {(userInfo?.role === "admin" ||
               userInfo?.role === "superAdmin") && (
