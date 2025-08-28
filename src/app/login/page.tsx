@@ -27,6 +27,7 @@ import Person2Icon from "@mui/icons-material/Person2";
 import LockIcon from "@mui/icons-material/Lock";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Link from "next/link";
 
 const validationSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -259,7 +260,7 @@ const LoginPage = () => {
                 },
               }}
             >
-              {/* <Link href="/login">Forgot Password?</Link> */}
+              <Link href="/forgot-password">Forgot Password?</Link>
             </Typography>
           </Box>
 

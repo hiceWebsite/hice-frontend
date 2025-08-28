@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -11,34 +11,21 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  TextField,
-  Paper,
-  Typography,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   useGetAllProductsQuery,
-  useUpdateProductMutation,
   useDeleteProductMutation,
 } from "@/redux/api/productApi";
-import { modifyPayload } from "@/utils/modifyPayload";
 import { toast } from "sonner";
 import CreateProduct from "./CreateProduct";
-import PHForm from "@/components/Forms/PHForm";
-import {
-  FieldValues,
-  useController,
-  useFormContext,
-  SubmitHandler,
-} from "react-hook-form";
-import { useDropzone } from "react-dropzone";
-import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import CircleLoading from "@/components/CircleLoading/CircleLoading";
+import UpdateProduct from "./UpdateProduct";
 
 type TProduct = {
   _id: string;
@@ -52,147 +39,15 @@ type TProduct = {
   updatedAt: string;
 };
 
-// Form values type
-interface FormValues {
-  codeNumber: string;
-  title: string;
-  category: string;
-  twoDFile?: File | null;
-  threeDFile?: File | null;
-}
-
-// Zod validation schema
-const productValidationSchema = z.object({
-  codeNumber: z.string().min(1, "Code Number is required"),
-  title: z.string().min(1, "Title is required"),
-  category: z.string().min(1, "Category is required"),
-  twoDFile: z.any().optional(),
-  threeDFile: z.any().optional(),
-});
-
-// Reused FileUpload component from CreateProduct
-interface FileUploadProps {
-  name: string;
-  label: string;
-  accept: string;
-  required?: boolean;
-}
-
-const FileUpload: React.FC<FileUploadProps> = ({
-  name,
-  label,
-  accept,
-  required,
-}) => {
-  const { control } = useFormContext();
-  const { field } = useController({ name, control });
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles && acceptedFiles.length > 0) {
-        field.onChange(acceptedFiles[0]);
-      }
-    },
-    [field]
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: { [accept]: [] },
-    multiple: false,
-  });
-
-  return (
-    <Box sx={{ width: "100%", mb: 2 }}>
-      <Paper
-        {...getRootProps()}
-        sx={{
-          p: 1,
-          border: "2px dashed",
-          borderColor: isDragActive ? "primary.main" : "grey.400",
-          borderRadius: 1,
-          textAlign: "center",
-          cursor: "pointer",
-          backgroundColor: isDragActive ? "primary.light" : "background.paper",
-          "&:hover": {
-            borderColor: "primary.main",
-            backgroundColor: "action.hover",
-          },
-          minHeight: 60,
-        }}
-        elevation={0}
-      >
-        <input {...getInputProps()} required={required} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <CloudUploadIcon sx={{ fontSize: 24, color: "primary.main" }} />
-          <Box>
-            <Typography variant="body2" color="text.primary">
-              {isDragActive ? "Drop here" : `${label}`}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {`(${accept})`}
-            </Typography>
-            {field.value && (
-              <Typography variant="caption" color="success.main">
-                {field.value.name}
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </Paper>
-    </Box>
-  );
-};
-
 const ProductsTable = () => {
   const { data, isLoading } = useGetAllProductsQuery({});
-  const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
   const products: TProduct[] = data?.products || [];
-
+  const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [updateRow, setUpdateRow] = useState<TProduct | null>(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-
-  // Initialize useForm with resolver
-  const methods = useForm<FormValues>({
-    resolver: zodResolver(productValidationSchema),
-    defaultValues: {
-      codeNumber: "",
-      title: "",
-      category: "",
-      twoDFile: null,
-      threeDFile: null,
-    },
-  });
-
-  // Reset form values when updateRow changes
-  useEffect(() => {
-    if (updateRow) {
-      methods.reset({
-        codeNumber: updateRow.codeNumber,
-        title: updateRow.title,
-        category: updateRow.category,
-        twoDFile: null,
-        threeDFile: null,
-      });
-    } else {
-      methods.reset({
-        codeNumber: "",
-        title: "",
-        category: "",
-        twoDFile: null,
-        threeDFile: null,
-      });
-    }
-  }, [updateRow, methods]);
+  const [loading, setLoading] = useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
   const handleAdd = () => {
     setOpenCreateDialog(true);
@@ -201,46 +56,22 @@ const ProductsTable = () => {
   const handleDelete = async () => {
     if (deleteId !== null) {
       try {
+        setLoading(true);
         await deleteProduct(deleteId).unwrap();
         toast.success("Product deleted successfully!");
         setDeleteId(null);
       } catch (error: any) {
         console.error("Delete failed:", error);
-        toast.error("Failed to delete product.");
+        toast.error(error?.data?.message || "Failed to delete product.");
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  const handleUpdateOpen = (row: TProduct) => {
-    setUpdateRow(row);
-  };
-
-  const handleUpdateClose = () => {
-    setUpdateRow(null);
-  };
-
-  const handleUpdateSave: SubmitHandler<FormValues> = async (values) => {
-    if (updateRow) {
-      try {
-        const payload = {
-          codeNumber: values.codeNumber.toUpperCase(),
-          title: values.title,
-          category: values.category,
-          twoDFile: values.twoDFile || undefined,
-          threeDFile: values.threeDFile || undefined,
-        };
-        const formData = modifyPayload(payload);
-        await updateProduct({
-          id: updateRow._id,
-          body: formData,
-        }).unwrap();
-        toast.success("Product updated successfully!");
-        setUpdateRow(null);
-      } catch (error: any) {
-        console.error("Update failed:", error);
-        toast.error(error?.message || "Failed to update product.");
-      }
-    }
+  const handleUpdateOpen = (product: TProduct) => {
+    setSelectedProduct(product);
+    setOpenUpdateDialog(true);
   };
 
   const columns: GridColDef[] = [
@@ -272,7 +103,7 @@ const ProductsTable = () => {
   if (isLoading) {
     return (
       <Box sx={{ height: 700, width: "100%" }}>
-        <CircleLoading />;
+        <CircleLoading />
       </Box>
     );
   }
@@ -284,6 +115,14 @@ const ProductsTable = () => {
       </Button>
 
       <CreateProduct open={openCreateDialog} setOpen={setOpenCreateDialog} />
+
+      {selectedProduct && (
+        <UpdateProduct
+          open={openUpdateDialog}
+          setOpen={setOpenUpdateDialog}
+          product={selectedProduct}
+        />
+      )}
 
       <DataGrid
         rows={products}
@@ -313,91 +152,20 @@ const ProductsTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteId(null)}>Cancel</Button>
-          <button
-            onClick={handleDelete}
-            className="mui-btn mui-btn--contained-error"
-          >
+          <Button onClick={handleDelete} color="error" variant="contained">
             DELETE
-          </button>
+          </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={updateRow !== null} onClose={handleUpdateClose}>
-        <DialogTitle>Update Product</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Edit the product details below.</DialogContentText>
-          <FormProvider {...methods}>
-            <PHForm
-              onSubmit={
-                methods.handleSubmit(
-                  handleUpdateSave
-                ) as SubmitHandler<FieldValues>
-              }
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                  mt: 2,
-                }}
-              >
-                <TextField
-                  {...methods.register("codeNumber", {
-                    setValueAs: (value: string) => value.toUpperCase(),
-                  })}
-                  label="Code Number"
-                  fullWidth
-                  required
-                  error={!!methods.formState.errors.codeNumber}
-                  helperText={methods.formState.errors.codeNumber?.message}
-                />
-                <TextField
-                  {...methods.register("title")}
-                  label="Title"
-                  fullWidth
-                  required
-                  error={!!methods.formState.errors.title}
-                  helperText={methods.formState.errors.title?.message}
-                />
-                <TextField
-                  {...methods.register("category")}
-                  label="Category"
-                  fullWidth
-                  required
-                  error={!!methods.formState.errors.category}
-                  helperText={methods.formState.errors.category?.message}
-                />
-                <FileUpload
-                  name="twoDFile"
-                  label="2D Image"
-                  accept="image/*"
-                  required={false}
-                />
-                <FileUpload
-                  name="threeDFile"
-                  label="3D Model"
-                  accept=".glb,.gltf"
-                  required={false}
-                />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: 1,
-                    mt: 2,
-                  }}
-                >
-                  <Button onClick={handleUpdateClose}>Cancel</Button>
-                  <Button type="submit" color="primary">
-                    Save
-                  </Button>
-                </Box>
-              </Box>
-            </PHForm>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.modal + 1 }}
+        open={loading}
+      >
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+          <CircularProgress color="inherit" />
+        </Box>
+      </Backdrop>
     </Box>
   );
 };

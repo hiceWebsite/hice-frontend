@@ -25,6 +25,7 @@ export const productApi = baseApi.injectEndpoints({
         params: arg,
       }),
       transformResponse: (response: TProduct[], meta: TMeta) => {
+        console.log("Meta information:", meta);
         return {
           products: response,
           meta,
@@ -42,13 +43,21 @@ export const productApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.product],
     }),
 
-    //update Product
+    // update Product
     updateProduct: build.mutation({
-      query: (data) => {
+      query: ({ id, data }) => {
+        // Log the ID and FormData contents
+        console.log("Updating product with ID:", id);
+        console.log("FormData contents:");
+        for (const [key, value] of data.entries()) {
+          console.log(`${key}:`, value);
+        }
+
         return {
-          url: `/products/${data.id}`,
+          url: `/products/${id}`,
           method: "PATCH",
-          data: data.body,
+          contentType: "multipart/form-data",
+          data,
         };
       },
       invalidatesTags: [tagTypes.product],

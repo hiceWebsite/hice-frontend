@@ -2,9 +2,9 @@
 import React, { useCallback, useState } from "react";
 import {
   Box,
-  Paper,
   Backdrop,
   CircularProgress,
+  Paper,
   Typography,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -13,12 +13,12 @@ import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import PHSelectField from "@/components/Forms/PHSelectField";
 import PHFullScreenModal from "@/components/Shared/PHModal/PHFullScreenModal";
-import { useCreateProductMutation } from "@/redux/api/productApi";
+import { useUpdateProductMutation } from "@/redux/api/productApi";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { PRODUCT_CATEGORIES } from "@/constants/categories";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { PRODUCT_CATEGORIES } from "@/constants/categories";
 
 // ----------------- File Upload Component -----------------
 interface FileUploadProps {
@@ -131,83 +131,92 @@ const FileUpload: React.FC<FileUploadProps> = ({
   );
 };
 
-// Modified Payload Modifier
-export const modifyProductPayload = (values: any) => {
+// ----------------- Payload Modifier -----------------
+export const modifyUpdatePayload = (values: any) => {
   const { codeNumber, title, category, twoDFile, threeDFile } = values;
-  const data = JSON.stringify({ codeNumber, title, category });
+  const data: any = {};
+  if (codeNumber) data.codeNumber = codeNumber.toUpperCase();
+  if (title) data.title = title;
+  if (category) data.category = category;
+
   const formData = new FormData();
-  formData.append("data", data);
-  formData.append("twoDFile", twoDFile as Blob);
+  if (Object.keys(data).length > 0) {
+    formData.append("data", JSON.stringify(data));
+  }
+  if (twoDFile instanceof File) {
+    formData.append("twoDFile", twoDFile);
+  }
   if (threeDFile instanceof File) {
     formData.append("threeDFile", threeDFile);
   }
   return formData;
 };
 
+// ----------------- Main Update Product -----------------
 type TProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  product: any; // TProduct
 };
 
-const CreateProduct = ({ open, setOpen }: TProps) => {
-  const [createProduct] = useCreateProductMutation();
+const UpdateProduct = ({ open, setOpen, product }: TProps) => {
+  const [updateProduct] = useUpdateProductMutation();
   const [loading, setLoading] = useState(false);
+
+  const defaultValues = {
+    codeNumber: product.codeNumber || "",
+    title: product.title || "",
+    category: product.category || "",
+    twoDFile: null,
+    threeDFile: null,
+  };
 
   const handleFormSubmit = async (values: FieldValues) => {
     const { codeNumber, title, category, twoDFile, threeDFile } = values;
 
-    const upperCaseCodeNumber = codeNumber.toUpperCase();
-
-    // Allow threeDFile to be optional
-    if (!upperCaseCodeNumber || !title || !category || !twoDFile) {
-      toast.error("Required fields are missing.");
+    // Check if at least one field is provided
+    if (!codeNumber && !title && !category && !twoDFile && !threeDFile) {
+      toast.error("At least one field must be provided to update.");
       return;
     }
 
-    // Validate file types
-    if (
-      !(twoDFile instanceof File) ||
-      (threeDFile && !(threeDFile instanceof File))
-    ) {
+    if (!(twoDFile instanceof File) || !(threeDFile instanceof File)) {
       toast.error("Invalid file format for 2D or 3D file.");
       return;
     }
 
     try {
       setLoading(true);
-      const formData = modifyProductPayload({
-        codeNumber: upperCaseCodeNumber,
+
+      const formData = modifyUpdatePayload({
+        codeNumber,
         title,
         category,
         twoDFile,
         threeDFile,
       });
-      const res = await createProduct(formData).unwrap();
+
+      const res = await updateProduct({
+        id: product._id,
+        data: formData,
+      }).unwrap();
       if (res?._id) {
-        toast.success("Product created successfully!");
+        toast.success("Product updated successfully!");
         setOpen(false);
       }
     } catch (err: any) {
-      console.error("Create product failed:", err);
-      toast.error(err?.message || "Failed to create product.");
+      console.error("Update product failed:", err);
+      toast.error(err?.message || "Failed to update product.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const defaultValues = {
-    codeNumber: "",
-    title: "",
-    category: "",
-    twoDFile: null,
-    threeDFile: null,
   };
 
   return (
     <PHFullScreenModal
       open={open}
       setOpen={setOpen}
-      title="Create New Product"
+      title="Update Product"
       sx={{ zIndex: 1300 }}
     >
       <PHForm onSubmit={handleFormSubmit} defaultValues={defaultValues}>
@@ -223,21 +232,20 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
             px: 2,
           }}
         >
-          <PHInput name="codeNumber" label="Code Number" fullWidth required />
-          <PHInput name="title" label="Title" fullWidth required />
+          <PHInput name="codeNumber" label="Code Number" fullWidth />
+          <PHInput name="title" label="Title" fullWidth />
           <PHSelectField
             name="category"
             label="Category"
             items={Object.values(PRODUCT_CATEGORIES)}
             fullWidth
-            required
             size="small"
           />
           <FileUpload
             name="twoDFile"
             label="2D Image"
             accept="image/*"
-            required
+            required={false}
           />
           <FileUpload
             name="threeDFile"
@@ -245,7 +253,6 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
             accept="model/gltf-binary,model/gltf+json"
             required={false}
           />
-
           <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
             <LoadingButton
               type="submit"
@@ -253,7 +260,7 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
               loading={loading}
               disabled={loading}
             >
-              Create
+              Update
             </LoadingButton>
           </Box>
         </Box>
@@ -271,4 +278,4 @@ const CreateProduct = ({ open, setOpen }: TProps) => {
   );
 };
 
-export default CreateProduct;
+export default UpdateProduct;

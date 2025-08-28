@@ -33,6 +33,11 @@ export const axiosBaseQuery =
           ...headers,
         },
       });
+
+      if (result.status === 204 || !result.data) {
+        return { data: { success: true } };
+      }
+
       return result;
     } catch (axiosError) {
       const err = axiosError as AxiosError;

@@ -137,7 +137,7 @@ export default function ThreeModelViewer({
         shadows
       >
         {/* lighting */}
-        <ambientLight intensity={0.6} color="#ffffff" />
+        <ambientLight intensity={0.3} color="#ffffff" />
 
         <hemisphereLight args={["#ffffff", "#ffffff", -1]} />
 
@@ -162,8 +162,8 @@ export default function ThreeModelViewer({
         {/* Right */}
         <directionalLight
           position={[20, 0, 0]}
-          intensity={0.5}
-          color="#ffffff"
+          intensity={0.01}
+          color="#5c5c5c"
         />
         {/* Front (toward camera) */}
         <directionalLight
@@ -185,7 +185,7 @@ export default function ThreeModelViewer({
           shadow-mapSize-height={2048}
         /> */}
         <EffectComposer>
-          <BrightnessContrast brightness={0} contrast={0.2} />
+          <BrightnessContrast brightness={-0.1} contrast={0.2} />
         </EffectComposer>
         {/* <directionalLight position={[0, 20, 0]} intensity={0.2} color="#000000" /> */}
         <Suspense
@@ -208,7 +208,7 @@ export default function ThreeModelViewer({
 
           <OrbitControls
             // autoRotate={!hasInteracted}
-            autoRotate
+            // autoRotate
             autoRotateSpeed={1}
             enableZoom={enableZoom}
             rotateSpeed={2}

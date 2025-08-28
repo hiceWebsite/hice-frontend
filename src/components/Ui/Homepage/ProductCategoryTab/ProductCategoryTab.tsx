@@ -6,20 +6,13 @@ import { useGetAllProductsQuery } from "@/redux/api/productApi";
 import { Container } from "@mui/material";
 
 const ProductCategoryTab = () => {
-  const { data, isLoading } = useGetAllProductsQuery({});
-
-  // console.log(data);
-  const products = data?.products || [];
+  const { isLoading } = useGetAllProductsQuery({});
 
   // console.log(doctors);
 
   return (
     <Container>
-      {!isLoading ? (
-        <CustomTabComponent products={products} sx={{}} />
-      ) : (
-        <CircleLoading />
-      )}
+      {!isLoading ? <CustomTabComponent sx={{}} /> : <CircleLoading />}
     </Container>
   );
 };
