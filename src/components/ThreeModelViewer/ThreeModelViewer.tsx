@@ -208,7 +208,7 @@ export default function ThreeModelViewer({
 
           <OrbitControls
             // autoRotate={!hasInteracted}
-            // autoRotate
+            autoRotate
             autoRotateSpeed={1}
             enableZoom={enableZoom}
             rotateSpeed={2}
