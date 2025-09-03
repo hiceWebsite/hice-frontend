@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useState } from "react";
 import {
@@ -180,13 +181,14 @@ const UpdateProduct = ({ open, setOpen, product }: TProps) => {
       return;
     }
 
-    if (!(twoDFile instanceof File) || !(threeDFile instanceof File)) {
-      toast.error("Invalid file format for 2D or 3D file.");
-      return;
-    }
+    // if (!(twoDFile instanceof File) || !(threeDFile instanceof File)) {
+    //   toast.error("Invalid file format for 2D or 3D file.");
+    //   return;
+    // }
 
     try {
       setLoading(true);
+      console.log("Updating product with values:", values);
 
       const formData = modifyUpdatePayload({
         codeNumber,

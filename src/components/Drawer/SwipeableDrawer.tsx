@@ -48,7 +48,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
         }}
       >
         {!isProductLoading ? (
-          <Box sx={{ overflow: "hidden" }}>
+          <Box sx={{}}>
             <Box sx={{ display: isOpen ? "block" : "none" }}>
               <ProductHeading productId={productId} />
             </Box>
@@ -105,7 +105,7 @@ const SwipeableDrawer: React.FC<SwipeableDrawerProps> = ({
                 </Box>
               </Box>
 
-              <Box sx={{ mt: 4 }}>
+              <Box sx={{ my: 4 }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography
                     variant="h6"

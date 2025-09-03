@@ -79,56 +79,69 @@ const CustomTabPanel: React.FC<TabPanelProps> = ({
     >
       {value === index && (
         <Box p={3}>
-          <Grid container spacing={3}>
-            {children?.map((product, idx) => (
-              <Grid key={idx} size={{ xs: 12, md: 4 }}>
-                <Link href={`/product/${product._id}`} target="_blank">
-                  <StyledCard>
-                    <Box
-                      sx={{
-                        position: "relative",
-                        width: "100%",
-                        height: "170px",
-                        borderRadius: "8px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <ThreeModelViewer
-                        modelUrl={product.threeDUrl}
-                        height="100%"
-                        width="100%"
-                        adjustCamera={1.3}
-                        enableZoom={false}
-                      />
-                    </Box>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      mt={3}
-                    >
-                      {product.codeNumber}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      mt={-1}
-                    >
-                      {product.category}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      textAlign="center"
-                      mt={1}
-                      color="text.secondary"
-                      sx={{ fontWeight: "bold", fontSize: "1.1rem" }}
-                    >
-                      {product.title}
-                    </Typography>
-                  </StyledCard>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+          {children?.length === 0 ? (
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              textAlign="center"
+              sx={{ mt: 5 }}
+            >
+              No products available
+            </Typography>
+          ) : (
+            <Grid container spacing={3}>
+              {children?.map((product, idx) => (
+                <Grid key={idx} size={{ xs: 12, md: 4 }}>
+                  <Link href={`/product/${product._id}`} target="_blank">
+                    <StyledCard>
+                      <Box
+                        sx={{
+                          position: "relative",
+                          width: "100%",
+                          height: "170px",
+                          borderRadius: "8px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <ThreeModelViewer
+                          modelUrl={product.threeDUrl}
+                          height="100%"
+                          width="100%"
+                          adjustCamera={1.3}
+                          enableZoom={false}
+                        />
+                      </Box>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        textAlign="center"
+                        sx={{ fontWeight: "bold", fontSize: "1rem" }}
+                        mt={3}
+                      >
+                        {product.codeNumber}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="text.secondary"
+                        mt={-1}
+                      >
+                        {product.category}
+                      </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        textAlign="center"
+                      >
+                        {product.title?.length > 35
+                          ? product.title.slice(0, 35) + "..."
+                          : product.title}
+                      </Typography>
+                    </StyledCard>
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
       )}
     </div>
