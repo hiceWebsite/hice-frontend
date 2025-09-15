@@ -25,7 +25,6 @@ export const productApi = baseApi.injectEndpoints({
         params: arg,
       }),
       transformResponse: (response: TProduct[], meta: TMeta) => {
-        console.log("Meta information:", meta);
         return {
           products: response,
           meta,

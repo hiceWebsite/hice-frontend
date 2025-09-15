@@ -40,7 +40,7 @@ type TProduct = {
 };
 
 const ProductsTable = () => {
-  const { data, isLoading } = useGetAllProductsQuery({});
+  const { data, isLoading } = useGetAllProductsQuery({ limit: 5000 });
   const [deleteProduct] = useDeleteProductMutation();
   const products: TProduct[] = data?.products || [];
   const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
