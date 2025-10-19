@@ -115,7 +115,7 @@ const Footer = () => {
                     width: 40,
                     height: 40,
                     borderRadius: "50%",
-                    backgroundColor: "#424952",
+                    backgroundColor: "secondary.main",
                     color: "#fff",
                     transition: "all 0.3s ease",
                     "& svg": { fontSize: 20 },
