@@ -4,6 +4,7 @@ import { Box, useTheme } from "@mui/material";
 import { useState } from "react";
 import SwipeableDrawer from "@/components/Drawer/SwipeableDrawer";
 import ProductPageClient from "@/app/product/[productId]/singleProductPage";
+import ProductDetailsSmallDevice from "../ProductDetailsSmallDevice/ProductDetailsSmallDevice";
 
 export default function ProductLayoutClient({
   productId,
@@ -15,33 +16,47 @@ export default function ProductLayoutClient({
   const drawerWidth = isDrawerOpen ? 525 : 100;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        position: "relative",
-        width: "100vw",
-        overflow: "hidden",
-      }}
-    >
-      <SwipeableDrawer
-        productId={productId}
-        isOpen={isDrawerOpen}
-        setIsOpen={setIsDrawerOpen}
-      />
-
+    <Box>
       <Box
         sx={{
-          ml: `${drawerWidth}px`,
-          width: `calc(100vw - ${drawerWidth}px)`,
-          height: "calc(100vh - 100px)",
-          transition: theme.transitions.create(["margin-left", "width"], {
-            duration: theme.transitions.duration.standard,
-            easing: theme.transitions.easing.easeInOut,
-          }),
+          display: { xs: "none", md: "flex" },
+          position: "relative",
+          width: "100vw",
           overflow: "hidden",
         }}
       >
-        <ProductPageClient productId={productId} />
+        <SwipeableDrawer
+          productId={productId}
+          isOpen={isDrawerOpen}
+          setIsOpen={setIsDrawerOpen}
+        />
+
+        <Box
+          sx={{
+            ml: `${drawerWidth}px`,
+            width: `calc(100vw - ${drawerWidth}px)`,
+            height: "calc(100vh - 100px)",
+            transition: theme.transitions.create(["margin-left", "width"], {
+              duration: theme.transitions.duration.standard,
+              easing: theme.transitions.easing.easeInOut,
+            }),
+            overflow: "hidden",
+          }}
+        >
+          <ProductPageClient productId={productId} />
+        </Box>
+      </Box>
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        <Box
+          sx={{
+            width: "100vw",
+            overflow: "hidden",
+            height: "calc(100vh - 300px)",
+          }}
+        >
+          <ProductPageClient productId={productId} />
+        </Box>
+        <ProductDetailsSmallDevice productId={productId} />;
       </Box>
     </Box>
   );
