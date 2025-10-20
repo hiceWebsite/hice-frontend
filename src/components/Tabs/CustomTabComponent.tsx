@@ -249,12 +249,17 @@ const CustomTabComponent: React.FC<CustomTabsProps> = ({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          "&::-webkit-scrollbar": { display: "none" },
         }}
       >
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="custom button tabs"
+          variant="scrollable"
+          scrollButtons="auto"
           sx={{ "& .MuiTabs-indicator": { display: "none" } }}
         >
           {categoryTab.map((tab, index) => (
@@ -262,6 +267,7 @@ const CustomTabComponent: React.FC<CustomTabsProps> = ({
           ))}
         </Tabs>
       </Box>
+
       {categoryTab.map((tab, index) => (
         <Box key={index}>
           <CustomTabPanel value={value} index={index}>
